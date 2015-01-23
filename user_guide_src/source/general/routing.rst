@@ -116,14 +116,12 @@ call the "shirts" controller class and the "id_123" method.
 With regular expressions, you can also catch a segment containing a
 forward slash ('/'), which would usually represent the delimiter between
 multiple segments.
+
 For example, if a user accesses a password protected area of your web
 application and you wish to be able to redirect them back to the same
 page after they log in, you may find this example useful::
 
 	$route['login/(.+)'] = 'auth/login/$1';
-
-That will call the "auth" controller class and its ``login()`` method,
-passing everything contained in the URI after *login/* as a parameter.
 
 For those of you who don't know regular expressions and want to learn
 more about them, `regular-expressions.info <http://www.regular-expressions.info/>`
@@ -141,6 +139,29 @@ routing rules to process the back-references. Example::
 	{
 		return 'catalog/product_edit/' . strtolower($product_type) . '/' . $id;
 	};
+
+Using HTTP verbs in routes
+==========================
+
+It is possible to use HTTP verbs (request method) to define your routing rules.
+This is particularly useful when building RESTful applications. You can use standard HTTP
+verbs (GET, PUT, POST, DELETE, PATCH) or a custom one such (e.g. PURGE). HTTP verb rules
+are case-insensitive. All you need to do is to add the verb as an array key to your route.
+Example::
+
+	$route['products']['put'] = 'product/insert';
+
+In the above example, a PUT request to URI "products" would call the ``Product::insert()``
+controller method.
+
+::
+
+	$route['products/(:num)']['DELETE'] = 'product/delete/$1';
+
+A DELETE request to URL with "products" as first the segment and a number in the second will be
+mapped to the ``Product::delete()`` method, passing the numeric value as the first parameter.
+
+Using HTTP verbs is of course, optional.
 
 Reserved Routes
 ===============
